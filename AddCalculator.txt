@@ -1,0 +1,41 @@
+<template>
+    <lightning-card  title="Lightning Calculator">
+       
+        <p class="slds-var-p-horizontal_small">SimpleCalculator</p>
+        <p slot="footer">{result}</p>
+   
+    <div>
+      
+      
+        <lightning-input type="number" name="fnumber" label="FirsrtNumber" onchange={handleLogic} value={firstnumber}></lightning-input>
+        <lightning-input type="number" name="snumber" label="SecondNumber" onchange={handleLogic} value={secondnumber}></lightning-input>
+    </div>
+</lightning-card>  
+</template>
+
+-----------------
+import { LightningElement ,track} from 'lwc';
+
+export default class AddCalculator extends LightningElement {
+    firstnumber=0;
+    secondnumber=0;
+    @track result=0;
+    handleLogic(event){
+if(event.target.name=='fnumber'){
+this.firstnumber=event.target.value;
+}
+if(event.target.name=='snumber'){
+    this.secondnumber=event.target.value;
+}
+this.result = parseInt(this.firstnumber) + parseInt(this.secondnumber);
+    }
+}
+-----------------
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+    <target>lightning__AppPage</target>
+    </targets>
+</LightningComponentBundle>
