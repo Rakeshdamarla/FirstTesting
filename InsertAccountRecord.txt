@@ -1,0 +1,63 @@
+<template>
+    <lightning-card  title="Account Creation">
+      <div>{success}</div>
+      <div>{error}</div>
+            <div class="slds-var-p-around_medium lgc-bg">
+                <lightning-input type="text" label="Name" name='Name' value={name} onchange={functioncalling} ></lightning-input>
+                <lightning-input type="text" label="Rating" name='Rating' value={rating} onchange={functioncalling} ></lightning-input>
+            </div>
+       
+        <div slot="footer"> 
+            <lightning-button label="Save" slot="actions" onclick={callingApexMethod}></lightning-button>
+        </div>
+    </lightning-card>
+</template>
+----------------------------
+import { LightningElement ,track} from 'lwc';
+import insertmethod from '@salesforce/apex/insertAccountRecordFromLWC.insertAccount'
+export default class InsertingAccount extends LightningElement {
+    @track name;
+    @track rating;
+    @track success;
+    @track error;
+callingApexMethod(){
+    insertmethod({
+        name:this.name,
+        rating:this.rating
+    })
+    .then(result => {
+        this.success=result;
+    })
+    .catch(error => {
+        this.error=error;
+    })
+}
+functioncalling(event){
+    if(event.target.name==='Name'){
+        this.name=event.target.value;
+        console.log(this.name);
+    }
+  else if(event.target.name='Rating'){
+      this.rating=event.target.value;
+  }
+}
+}
+-----------------------------------------
+public with sharing class insertAccountRecordFromLWC {
+    public insertAccountRecordFromLWC() {
+
+    }
+    @AuraEnabled
+    public static string insertAccount(string name,string rating){
+     list<account>acclist=new list<account>();
+     account acc=new account();
+     acc.name=name;
+     acc.rating=rating;
+    acclist.add(acc);
+    if(acclist.size()>0){
+        insert acclist;
+    }
+    
+    return 'Record Inserted Succesfully......';
+}
+}
